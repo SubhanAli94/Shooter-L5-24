@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -13,6 +14,16 @@ public class GameManager : MonoBehaviour
     //This game object is the parent of GameOverText and PlayAgainButton.
     //We need only their parent to display/hide both of them.
     public GameObject gameOverContent;
+
+    //This game object is the parent of StartGameText and PlayButton.
+    //We need only their parent to display/hide both of them.
+    public GameObject startGameContent;
+
+    //Animator to hide the UI elements when the game starts
+    public Animator startGameAnimator;
+
+    //Animator to show the UI elements when the game is over.
+    public Animator gameOverAnimator;
 
     //The Player gameobject is needed to activate the player again
     //when the user clicks the PlayAgain button.
@@ -51,28 +62,70 @@ public class GameManager : MonoBehaviour
     //This function is called when the user clicks on the PlayAgain Button.
     public void StartGame()
     {
+        if (startGameContent.activeSelf)
+        {
+            //Trigger the GameStarted Animation
+            startGameAnimator.SetTrigger("GameStarted");
+        }
+
+        if (gameOverContent.activeSelf)
+        {
+            Debug.Log("Animation Triggered");
+
+            //Trigger the GameStarted Animation
+            gameOverAnimator.SetTrigger("GameRestarted");
+        }
+
+
+    }
+
+    public void OnStartGameAnimationEnd() {
+
+        if (startGameContent.activeSelf)
+        {
+            startGameContent.SetActive(false);
+        }
+        score = 0; // Set the score to zero.
+        scoreText.text = "Score: " + 0; // Display the zero score in the text view.
+
+        isGameOver = false;
+
+        player.SetActive(true); // Activate the Player.
+
+    }
+
+    public void OnGameRestartAnimationEnd() {
+        Debug.Log("Animation Ended: GameManager");
+
+        if (gameOverContent.activeSelf)
+        {
+            gameOverContent.SetActive(false);
+        }
         score = 0; // Set the score to zero.
         scoreText.text = "Score: " + 0; // Display the zero score in the text view.
 
         isGameOver = false; // Game is no longer over.
 
         gameOverContent.SetActive(false);  // Hide GameOver text and PlayAgain button.
-        
+
         player.SetActive(true); // Activate the Player.
-       
     }
 
     //This function is called when the Enemy hits the Player.
     public void GameOver()
     {
-        //Play the destruction sound.
+        // Play the destruction sound.
         SoundManager.instance.PlayDestroySound();
 
         isGameOver = true; //Game is over.
 
-        gameOverContent.SetActive(true);  // Show GameOver text and PlayAgain button.
-        
         player.SetActive(false); //De-Activate the Player.
+
+        // Show GameOver text and PlayAgain button.
+        gameOverContent.SetActive(true);
+
+        // Trigger the GameOver animation.
+        gameOverAnimator.SetTrigger("GameOver");
     }
 
     // Function to check if the game is over
