@@ -155,6 +155,7 @@ MonoBehaviour:
   startGameContent: {fileID: 594063054}
   player: {fileID: 851830838}
   scoreText: {fileID: 1832539448}
+  scoreToNextLevel: 5
 --- !u!4 &18588239
 Transform:
   m_ObjectHideFlags: 0

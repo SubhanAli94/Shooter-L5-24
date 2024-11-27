@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
@@ -32,6 +33,9 @@ public class GameManager : MonoBehaviour
     //This variable keeps track of the score.
     private int  score = 0;
 
+    // The score required to reach the next level
+    public int scoreToNextLevel = 5;
+
     void Awake()
     {
         // Ensure there is only one GameManager instance (Singleton pattern)
@@ -49,6 +53,14 @@ public class GameManager : MonoBehaviour
             //If another GameManager is created then destroy it because we 
             //only one copy/instance of GameManager in our game.
             Destroy(gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        if (score >= scoreToNextLevel)
+        {
+            ProceedToNextLevel();
         }
     }
 
@@ -117,5 +129,13 @@ public class GameManager : MonoBehaviour
         score++; //Increase the score.
 
         scoreText.text = "Score: " + score.ToString(); //Show the incremented score on UI.
+    }
+
+    //This function comprises the logic of moving to next level 2
+    public void ProceedToNextLevel() {
+
+        //Run splash animation to celebrate the passing of first level 
+        //Navigate to the next level (Scene2)
+        SceneManager.LoadScene("Level2");
     }
 }

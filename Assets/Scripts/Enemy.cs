@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    
+
+    //This object will hold reference to the EnemyExplosion prefab
+    public GameObject enemyExplosionParticleSystemPrefab;
 
     private void OnCollisionEnter2D(Collision2D other)
     {        
@@ -21,6 +23,9 @@ public class Enemy : MonoBehaviour
         // Check if the bullet collides with the Enemy
         if (other.gameObject.CompareTag("Bullet"))
         {
+            //Instantiate the EnemyExplosion Prefab at the same location where the bullet collides with the enemy.
+            GameObject enemyExplosion = Instantiate(enemyExplosionParticleSystemPrefab, transform.position, transform.rotation);
+            Destroy(enemyExplosion, 0.75f);
 
             Destroy(gameObject); // Destroy the Enemy
             Destroy(other.gameObject); // Destroy the Bullet
